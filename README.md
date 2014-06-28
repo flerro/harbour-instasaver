@@ -7,7 +7,7 @@ A minimalist and open source Instapaper client for Sailfish OS. You are now able
 ## Changelog
 
 0.2 - 28/06/2014
-- When submitting from cover, if no URL in clipboard the main dialog is activated (can be disabled in preferences)
+- If no URL in clipboard when submitting from cover, the main dialog is activated (can be disabled in preferences)
 - Added an option to always popup the main dialog when submitting from cover
 - Instapaper API request timeouts after 8 seconds (eg. if no internet)
 - Enhanced notification readability
