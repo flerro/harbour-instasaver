@@ -90,7 +90,7 @@ var storage = {
     },
 
     open: function() {
-        return Sql.LocalStorage.openDatabaseSync("AAA", "1.0", "Settings DB", 1000000);
+        return Sql.LocalStorage.openDatabaseSync("Instasaver", "1.0", "Settings DB", 1000000);
     },
 
     store: function(items) {
@@ -113,7 +113,7 @@ var storage = {
         db.transaction(function (tx) {
             try {
                 var res = tx.executeSql('SELECT value FROM settings where name = ?;', name);
-                console.debug("read: ", name, " -> ", res.rows.item(0).value)
+                //console.debug("read: ", name, " -> ", res.rows.item(0).value)
                 retval = res.rows.length > 0 ? res.rows.item(0).value : "";
             } catch (err) {
                 console.warn("storage.read KO: " + err.toString())

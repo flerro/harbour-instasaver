@@ -65,7 +65,12 @@ Dialog {
             }
             MenuItem {
                 text: qsTr("From Clipboard")
-                onClicked: pasteUrl()
+                onClicked: {
+                    pasteUrl()
+                    if (!url) {
+                        banner.notify("No URL in clipboard")
+                    }
+                }
             }
         }
 
