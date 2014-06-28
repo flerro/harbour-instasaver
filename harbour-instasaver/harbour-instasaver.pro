@@ -24,16 +24,13 @@ OTHER_FILES += qml/harbour-instasaver.qml \
     translations/*.ts \
     harbour-instasaver.desktop \
     qml/pages/Main.qml \
-    qml/js/HttpClient.js \
-    qml/js/HttpClient.js \
-    qml/js/HttpClient.js \
     qml/components/Banner.qml \
     qml/pages/Settings.qml \
     qml/pages/About.qml \
     qml/js/LocalStorage.js \
-    qml/js/Service.js \
     qml/js/UrlUtils.js \
-    qml/components/BusyOverlay.qml
+    qml/components/BusyOverlay.qml \
+    qml/components/InstapaperClient.qml
 
 # to disable building translations every time, comment out the
 # following CONFIG line

@@ -20,11 +20,6 @@ Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No URL found
-in Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Adding...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -37,7 +32,15 @@ in Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Success.</source>
+        <source>No URL in clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No URL in Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -45,6 +48,13 @@ in Clipboard</source>
     <name>InactiveCover</name>
     <message>
         <source>Instasaver</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InstapaperClient</name>
+    <message>
+        <source>No URL provided.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -75,11 +85,11 @@ in Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Success</source>
+        <source>From Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>From Clipboard</source>
+        <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -113,11 +123,19 @@ in Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Note: It&apos;s comfortable but not secure</source>
+        <source>Instapaper credentials are stored in clear text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Insert Instapaper.com credentials</source>
+        <source>Using the cover action:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>confirm URL submission</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>input URL if not found in clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
