@@ -8,7 +8,14 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Sun May 25 2014 Francesco Lerro <francesco.lerro@gmail.com> 0.0.1-1
-- Implemented
+* Thu Sat 28 2014 Francesco Lerro <francesco.lerro@gmail.com> 0.0.2-1
+- When submitting from cover, if no URL in clipboard the main dialog is activated (can be disabled in preferences)
+- Added an option to always popup the main dialog when submitting from cover
+- Instapaper API request timeouts after 8 seconds (eg. if no internet)
+- Enhanced notification readability
+- Partial rewrite of some parts of the application
+
+* Sun Jun 22 2014 Francesco Lerro <francesco.lerro@gmail.com> 0.0.1-1
+- First release
 
 

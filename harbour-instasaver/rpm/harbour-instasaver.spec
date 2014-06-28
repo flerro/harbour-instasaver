@@ -12,12 +12,12 @@ Name:       harbour-instasaver
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
-Summary:    Instasail
-Version:    0.1
+Summary:    Instasaver
+Version:    0.2
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
-URL:        http://example.org/
+URL:        http://www.rolandfg.net/2014/06/22/instasaver-for-sailfish-os/
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-instasaver.yaml
 Requires:   sailfishsilica-qt5 >= 0.10.9
@@ -28,7 +28,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Short description of my SailfishOS Application
+A minimalist Instapaper client for Sailfish OS
 
 
 %prep
