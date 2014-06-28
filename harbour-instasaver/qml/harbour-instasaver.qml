@@ -30,23 +30,38 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
 
-import "./js/LocalStorage.js" as Settings
-import "components"
+import "js/LocalStorage.js" as Settings
 
 ApplicationWindow
 {
-    id: window
+    id: app
     initialPage: Component { Main { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 
     Component.onCompleted: {
-        Settings.initStorage();
-
-        if(!Settings.getUser()) {
-            pageStack.push(Qt.resolvedUrl("pages/Settings.qml"))
-        }
+        Settings.init();
     }
 
+    function toMainPage(msg) {
+        return navigateToPage("pages/Main.qml");
+    }
+
+    function toSettingsPage() {
+        toMainPage()
+        displaySettings();
+        return pageStack.currentPage
+    }
+
+    function navigateToPage(uri) {
+        pageStack.clear();
+        pageStack.replace(Qt.resolvedUrl(uri));
+        activate();
+        return pageStack.currentPage
+    }
+
+    function displaySettingsPage() {
+        pageStack.push("pages/Settings.qml");
+    }
 }
 
 

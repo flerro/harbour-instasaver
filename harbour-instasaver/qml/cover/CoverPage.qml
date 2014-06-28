@@ -28,9 +28,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import "../js/Service.js" as Service
+import "../js/LocalStorage.js" as Settings
 import "../js/UrlUtils.js" as Utils
 import "../pages"
+import "../components"
 
 CoverBackground {
     id: cover
@@ -86,12 +87,16 @@ CoverBackground {
         onTriggered: resetCover()
     }
 
+    InstapaperClient {
+        id: client
+    }
+
     CoverActionList {
         id: coverAction
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
-            onTriggered: readLaterFromClipboard()
+            onTriggered: readLater()
         }
     }
 
@@ -109,24 +114,49 @@ CoverBackground {
         hint = (url) ? qsTr("URL in clipboard") : ""
     }
 
-    function readLaterFromClipboard() {
-        refreshUrlFromClipboard()
-        if (!url) {
-            hint = qsTr("No URL found\nin Clipboard")
-            resetTimer.restart()
-            return
+    function readLater() {
+        try {
+            refreshUrlFromClipboard()
+
+            var prefs = Settings.read()
+
+            if (!url && prefs.activateIfNoUrlInClipboard) {
+                var page = app.toMainPage()
+                page.pasteUrlAndNotify(qsTr("No URL in clipboard"))
+                return
+            }
+
+            if (!url && !prefs.activateIfNoUrlInClipboard) {
+                hint = qsTr("No URL in Clipboard")
+                resetTimer.restart()
+                return
+            }
+
+            if (prefs.confirmUrlFromCover) {
+                var page = app.toMainPage()
+                page.pasteUrl()
+                return
+            }
+
+            hint = qsTr("Adding...")
+
+            client.success.connect(function() {
+                hint = qsTr("Success")
+                resetTimer.restart()
+            })
+
+            client.failure.connect(function(message) {
+                hint = message
+            })
+
+            var prefs = Settings.read();
+            client.add(url, prefs.user, prefs.password)
+
+        } catch(error) {
+            hint = error.toString()
         }
-
-        hint = qsTr("Adding...")
-
-        var ok = function() {
-            hint = qsTr("Success.")
-            resetTimer.restart()
-        };
-        var ko = function(msg) { hint = msg }
-
-        Service.readLater(url, ok, ko)
     }
+
 }
 
 

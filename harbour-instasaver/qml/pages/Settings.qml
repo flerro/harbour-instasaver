@@ -31,23 +31,27 @@ import "../js/LocalStorage.js" as Settings
  * Settings Page
  */
 Dialog {
-    id: settingPage
+    id: settingsPage
 
     onAccepted: {
-        Settings.setPassword(password.text);
-        Settings.setUser(user.text);
+        Settings.store(user.text,
+                       password.text,
+                        confirmUrlFromCover.checked,
+                        activateIfNoUrlInClipboard.checked)
     }
 
     onStatusChanged: {
         if (status === DialogStatus.Opening) {
-            user.text = Settings.getUser()
-            password.text = Settings.getPassword()
+            var prefs = Settings.read()
+            user.text = prefs.user || ""
+            password.text = prefs.password || ""
+            confirmUrlFromCover.checked = prefs.confirmUrlFromCover
+            activateIfNoUrlInClipboard.checked = prefs.activateIfNoUrlInClipboard
         }
     }
 
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: column.height
 
         PullDownMenu {
             MenuItem {
@@ -55,66 +59,95 @@ Dialog {
                 onClicked: {
                     user.text = ""
                     password.text = ""
+                    confirmUrlFromCover.checked = true
+                    activateIfNoUrlInClipboard.checked = false
                 }
             }
         }
 
         Column {
-            id: column
+            id: wrapper
 
             width: parent.width
-            spacing: Theme.paddingMedium
+            spacing: 6 * Theme.paddingMedium
 
-            DialogHeader {
-                id: header
-                acceptText: qsTr("Save")
-                title: qsTr("Settings")
-            }
+            Column {
+                id: column
 
-            TextField {
-                id: user
-                placeholderText: qsTr("Username")
-                label: qsTr("Username")
                 width: parent.width
-                EnterKey.enabled: text.length > 0
-                EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: password.focus = true
-            }
+                spacing: Theme.paddingMedium
 
-            TextField {
-                id: password
-                placeholderText: qsTr("Password")
-                label: qsTr("Password")
-                width: parent.width
-                echoMode: TextInput.Password
-                EnterKey.enabled: text.length > 0
-                EnterKey.iconSource: "image://theme/icon-m-enter-close"
-                EnterKey.onClicked: focus = false
-            }
 
-            Label {
-                anchors {
-                    right: header.left
-                    rightMargin: Theme.paddingLarge
+                DialogHeader {
+                    id: header
+                    acceptText: qsTr("Save")
+                    title: qsTr("Settings")
                 }
-                text: qsTr("Insert Instapaper.com credentials")
-                width: parent.width
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeExtraSmall
-                horizontalAlignment: Text.AlignLeft
+
+                Label {
+                    anchors {
+                        right: parent.right
+                        rightMargin: Theme.paddingLarge
+                    }
+                    text: qsTr("Instapaper credentials are stored in clear text")
+                    width: parent.width
+                    color: Theme.highlightColor
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    horizontalAlignment: Text.AlignRight
+                }
+
+                TextField {
+                    id: user
+                    placeholderText: qsTr("Username")
+                    label: qsTr("Username")
+                    width: parent.width
+                    EnterKey.enabled: text.length > 0
+                    EnterKey.iconSource: "image://theme/icon-m-enter-next"
+                    EnterKey.onClicked: password.focus = true
+                }
+
+                TextField {
+                    id: password
+                    placeholderText: qsTr("Password")
+                    label: qsTr("Password")
+                    width: parent.width
+                    echoMode: TextInput.Password
+                    EnterKey.enabled: text.length > 0
+                    EnterKey.iconSource: "image://theme/icon-m-enter-close"
+                    EnterKey.onClicked: focus = false
+                }
+
+
             }
 
-
-            Label {
-                anchors {
-                    right: header.right
-                    rightMargin: Theme.paddingLarge
-                }
-                text: qsTr("Note: It's comfortable but not secure")
+            Column {
+                id: column1
                 width: parent.width
-                color: Theme.highlightColor
-                font.pixelSize: Theme.fontSizeExtraSmall
-                horizontalAlignment: Text.AlignRight
+                spacing: Theme.paddingSmall
+
+                Label {
+                    anchors {
+                        left: parent.left
+                        leftMargin: Theme.paddingLarge
+                    }
+                    text: qsTr("Using the cover action:")
+                    width: parent.width
+                    color: Theme.highlightColor
+                    font.pixelSize: Theme.fontSizeMedium
+                }
+
+                TextSwitch {
+                    id: confirmUrlFromCover
+                    text: qsTr("confirm URL submission")
+                    width: parent.width
+                }
+
+                TextSwitch {
+                    id: activateIfNoUrlInClipboard
+                    text: qsTr("input URL if not found in clipboard")
+                    width: parent.width
+                }
+
             }
 
         }

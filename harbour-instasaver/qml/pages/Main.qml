@@ -25,11 +25,9 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import "../js/Service.js" as Service
-import "../js/LocalStorage.js" as Settings
 import "../js/UrlUtils.js" as Utils
+import "../js/LocalStorage.js" as Settings
 import "../components"
-
 
 Dialog {
     id: mainPage
@@ -40,6 +38,10 @@ Dialog {
     onStatusChanged: {
         if (status === PageStatus.Active) {
             user = Settings.getUser()
+
+            if (!user) {
+                app.displaySettingsPage()
+            }
         }
     }
 
@@ -63,11 +65,7 @@ Dialog {
             }
             MenuItem {
                 text: qsTr("From Clipboard")
-                onClicked: {
-                    if (Clipboard.hasText) {
-                       url = Utils.extractUrl(Clipboard.text)
-                    }
-                }
+                onClicked: pasteUrl()
             }
         }
 
@@ -76,7 +74,7 @@ Dialog {
         Column {
             id: column
 
-            width: mainPage.width
+            width: parent.width
             spacing: Theme.paddingLarge
             DialogHeader {
                 acceptText: qsTr("Read later")
@@ -115,18 +113,44 @@ Dialog {
         id: busyIndicator
     }
 
-    function readLater() {
-        busyIndicator.running = true;
-        var ok = function() {
-            busyIndicator.running = false;
-            banner.notify(qsTr("Success"))
-        };
-        var ko = function(message) {
-            busyIndicator.running = false;
-            banner.notify(qsTr(message))
-        };
-        Service.readLater(url, ok, ko)
+    InstapaperClient {
+        id: client
     }
+
+    function pasteUrl() {
+        if (Clipboard.hasText) {
+           url = Utils.extractUrl(Clipboard.text)
+        }
+    }
+
+    function pasteUrlAndNotify(msg) {
+        pasteUrl()
+        if (msg) banner.notify(msg)
+    }
+
+    function readLater() {
+        try {
+            busyIndicator.running = true;
+
+            client.success.connect(function() {
+                busyIndicator.running = false;
+                banner.notify(qsTr("Success"))
+            })
+
+            client.failure.connect(function(message) {
+                busyIndicator.running = false;
+                banner.notify(qsTr(message))
+            })
+
+            var prefs = Settings.read();
+            client.add(url, prefs.user, prefs.password)
+
+        } catch(error) {
+            busyIndicator.running = false;
+            banner.notify(error.toString())
+        }
+    }
+
 }
 
 
