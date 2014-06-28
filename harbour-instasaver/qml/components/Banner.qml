@@ -46,7 +46,7 @@ MouseArea {
     Rectangle {
         id: bg
         anchors.fill: parent
-        color: Theme.secondaryHighlightColor
+        color: Theme.highlightColor
     }
 
     Timer {
@@ -77,11 +77,13 @@ MouseArea {
         id: message
         anchors.verticalCenter: popup.verticalCenter
         font.pixelSize: 32
+//        font.bold: true
+        color: "#000"
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
         anchors.rightMargin: Theme.paddingLarge
-        horizontalAlignment: Text.AlignHCenter
+        horizontalAlignment: Text.AlignLeft
         elide: Text.ElideRight
         wrapMode: Text.Wrap
     }

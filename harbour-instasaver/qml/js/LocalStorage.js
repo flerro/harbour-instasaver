@@ -30,27 +30,51 @@
 .import QtQuick.LocalStorage 2.0 as Sql
 
 
-function setUser(value) {
-    storage.store("USER", value);
+var keys = { user: "USER",
+                    password: "PWD",
+                    confirmUrlFromCover: "CONFIRMFROMCOVER",
+                    activateIfNoUrlInClipboard: "ACTIVATEIFNOURL" };
+
+function init() { storage.setup(); };
+
+function read() {
+    var prefs = storage.read();
+
+    // name aliasing for preferences
+    return {
+            user: prefs[keys.user],
+            password: prefs[keys.password],
+            confirmUrlFromCover : asBool(prefs[keys.confirmUrlFromCover]),
+            activateIfNoUrlInClipboard: asBool(prefs[keys.activateIfNoUrlInClipboard])
+           }
 }
 
-function setPassword(value) {
-    storage.store("PWD", value);
+function store(user, password, confirmUrlFromCover, activateOnCoverError) {
+    var items = new Array();
+    items[keys.user] = user
+    items[keys.password] = password
+    items[keys.confirmUrlFromCover] = confirmUrlFromCover
+    items[keys.activateIfNoUrlInClipboard] = activateOnCoverError
+    storage.store(items);
 }
 
 function getUser() {
-    return storage.read("USER") || "";
+    return storage.readPref(keys.user) || "";
 }
 
-function getPassword() {
-    return storage.read("PWD") || "";
+function shouldConfirmUrlFromCover() {
+    return asBool(storage.readPref(keys.confirmUrlFromCover));
 }
 
-function initStorage(){
-    storage.setup()
+function shouldActivateIfNoUrlInClipboard() {
+    return asBool(storage.readPref(keys.activateIfNoUrlInClipboard));
 }
 
-// Utils ---------------------------------------------------------------------
+// ------------------------------------------------------------ Private
+
+var asBool = function(val) {
+     return val == 1
+}
 
 var storage = {
 
@@ -66,39 +90,60 @@ var storage = {
     },
 
     open: function() {
-        return Sql.LocalStorage.openDatabaseSync("Instasaver", "1.0", "Settings DB", 1000000);
+        return Sql.LocalStorage.openDatabaseSync("AAA", "1.0", "Settings DB", 1000000);
     },
 
-    store: function(name, value) {
+    store: function(items) {
         var db = storage.open();
         db.transaction(function (tx) {
-            try {
-                tx.executeSql('INSERT OR REPLACE INTO settings VALUES(?, ?);', [name, value]);
-//                console.debug("Inserted: ", name, " -> ", value)
-            } catch (err) {
-                console.warn("storage.store KO: " + err.toString())
+            for (var i in items) {
+                try {
+                    tx.executeSql('INSERT OR REPLACE INTO settings VALUES(?, ?);', [i, items[i]]);
+                    // console.debug("Inserted: ", i, " -> ", items[i])
+                } catch (err) {
+                    console.warn("storage.store KO: " + err.toString())
+                }
             }
         });
     },
 
-    read: function(name) {
+    readPref: function(name) {
         var db =  storage.open();
-        var retval = undefined;
+        var retval = new Array();
         db.transaction(function (tx) {
             try {
-                var res = tx.executeSql('SELECT value FROM settings WHERE name = ?;', [name]);
-                if (res.rows.length > 0) {
-                    retval = res.rows.item(0).value;
-                } else {
-//                    console.warn("name ", name, " not found!");
-                    retval = undefined;
-                }
+                var res = tx.executeSql('SELECT value FROM settings where name = ?;', name);
+                console.debug("read: ", name, " -> ", res.rows.item(0).value)
+                retval = res.rows.length > 0 ? res.rows.item(0).value : "";
             } catch (err) {
                 console.warn("storage.read KO: " + err.toString())
             }
         });
         return retval;
+    },
+
+    read: function(name) {
+        var db =  storage.open();
+        var retval = new Array();
+        db.transaction(function (tx) {
+            try {
+                var res = tx.executeSql('SELECT * FROM settings;');
+                for ( var i = 0; i < res.rows.length; i++) {
+                    var current = res.rows.item(i);
+                    // console.debug("Read: ", current.name, " -> ", current.value)
+                    retval[current.name] = current.value;
+                }
+            } catch (err) {
+                console.warn("storage.read KO: " + err.toString())
+            }
+        });
+
+        return retval;
     }
 
 };
+
+
+
+
 
