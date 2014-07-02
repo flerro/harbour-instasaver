@@ -83,7 +83,7 @@ CoverBackground {
         id: resetTimer
         triggeredOnStart: false
         repeat: false
-        interval: 5000
+        interval: 3500
         onTriggered: resetCover()
     }
 
@@ -112,21 +112,23 @@ CoverBackground {
 
         url = Utils.extractUrl(Clipboard.text)
         hint = (url) ? qsTr("URL in clipboard") : ""
+
+        return url
     }
 
     function readLater() {
         try {
-            refreshUrlFromClipboard()
+            var currentUrl = refreshUrlFromClipboard()
 
             var prefs = Settings.read()
 
-            if (!url && prefs.activateIfNoUrlInClipboard) {
+            if (!currentUrl && prefs.activateIfNoUrlInClipboard) {
                 var page = app.toMainPage()
                 page.pasteUrlAndNotify(qsTr("No URL in clipboard"))
                 return
             }
 
-            if (!url && !prefs.activateIfNoUrlInClipboard) {
+            if (!currentUrl && !prefs.activateIfNoUrlInClipboard) {
                 hint = qsTr("No URL in Clipboard")
                 resetTimer.restart()
                 return
@@ -150,7 +152,7 @@ CoverBackground {
             })
 
             var prefs = Settings.read();
-            client.add(url, prefs.user, prefs.password)
+            client.add(currentUrl, prefs.user, prefs.password)
 
         } catch(error) {
             hint = error.toString()

@@ -116,13 +116,6 @@ Instapaper</source>
     </message>
 </context>
 <context>
-    <name>Service</name>
-    <message>
-        <source>No URL provided.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Settings</name>
     <message>
         <source>Reset to defaults</source>
