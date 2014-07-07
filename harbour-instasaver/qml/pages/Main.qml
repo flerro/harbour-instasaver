@@ -30,7 +30,7 @@ import "../js/LocalStorage.js" as Settings
 import "../components"
 
 Dialog {
-    id: mainPage
+    id: main
 
     property alias url: href.text
     property alias user: username.text
@@ -45,11 +45,9 @@ Dialog {
         }
     }
 
-    canAccept: url && url.match(Utils.urlMatcher())
+    canAccept: Utils.isUrl(url)
 
-    onAccepted: {
-        readLater()
-    }
+    onAccepted: readLater()
 
     SilicaFlickable {
         anchors.fill: parent
@@ -64,12 +62,9 @@ Dialog {
                 onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
             }
             MenuItem {
-                text: qsTr("From Clipboard")
+                text: qsTr("URL from Clipboard")
                 onClicked: {
-                    pasteUrl()
-                    if (!url) {
-                        banner.notify("No URL in clipboard")
-                    }
+                    url = app.extractURLFromClipboard()
                 }
             }
         }
@@ -86,18 +81,20 @@ Dialog {
                 title: qsTr("Instasaver")
             }
 
-            TextField {
+            TextArea {
                 id: href
                 anchors.horizontalCenter: parent.horizontalCenter
                 placeholderText: qsTr("Enter URL")
                 label: qsTr("URL")
                 width: column.width
                 focus: true
-                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase
-                validator: RegExpValidator { regExp: Utils.urlMatcher() }
-                EnterKey.enabled: mainPage.canAccept
-                EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: readLater()
+                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhExclusiveInputMask
+//                validator: RegExpValidator { regExp: Utils.urlMatcher() }
+                EnterKey.enabled: false
+//                EnterKey.enabled: Utils.isUrl(url)
+//                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+//                EnterKey.onClicked: readLater()
+                font.pixelSize: 0
             }
 
             Label {
@@ -110,50 +107,8 @@ Dialog {
         }
     }
 
-    Banner {
-        id: banner
-    }
-
-    BusyOverlay {
-        id: busyIndicator
-    }
-
-    InstapaperClient {
-        id: client
-    }
-
-    function pasteUrl() {
-        if (Clipboard.hasText) {
-           url = Utils.extractUrl(Clipboard.text)
-        }
-    }
-
-    function pasteUrlAndNotify(msg) {
-        pasteUrl()
-        if (msg) banner.notify(msg)
-    }
-
-    function readLater() {
-        try {
-            busyIndicator.running = true;
-
-            client.success.connect(function() {
-                busyIndicator.running = false;
-                banner.notify(qsTr("Success"))
-            })
-
-            client.failure.connect(function(message) {
-                busyIndicator.running = false;
-                banner.notify(qsTr(message))
-            })
-
-            var prefs = Settings.read();
-            client.add(url, prefs.user, prefs.password)
-
-        } catch(error) {
-            busyIndicator.running = false;
-            banner.notify(error.toString())
-        }
+    function readLater(){
+        app.readLater(url)
     }
 
 }

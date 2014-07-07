@@ -29,7 +29,9 @@ THE SOFTWARE.
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "pages"
+import "components"
 
+import "js/UrlUtils.js" as Utils
 import "js/LocalStorage.js" as Settings
 
 ApplicationWindow
@@ -40,28 +42,113 @@ ApplicationWindow
 
     Component.onCompleted: {
         Settings.init();
+
+        Clipboard.text = "adsad sa dsa sa http://www.test.com/dasdsasadsa/dsadsadsadsadsadsa"
+    }
+
+    InstapaperClient {
+        id: client
+    }
+
+    Banner {
+        id: banner
+    }
+
+    BusyOverlay {
+        id: spinner
     }
 
     function toMainPage(msg) {
-        return navigateToPage("pages/Main.qml");
-    }
-
-    function toSettingsPage() {
-        toMainPage()
-        displaySettings();
-        return pageStack.currentPage
-    }
-
-    function navigateToPage(uri) {
+        var uri = "pages/Main.qml"
         pageStack.clear();
         pageStack.replace(Qt.resolvedUrl(uri));
         activate();
         return pageStack.currentPage
     }
 
-    function displaySettingsPage() {
+    function toSettingsPage() {
+        toMainPage()
         pageStack.push("pages/Settings.qml");
+        return pageStack.currentPage
     }
+
+    function activeCover() {
+        app.cover = Qt.resolvedUrl("cover/CoverPage.qml")
+    }
+
+    function inactiveCover() {
+        var cover = Qt.resolvedUrl("cover/CoverPage.qml")
+        cover.hint = "ciao bello..."
+        app.cover = cover
+    }
+
+    function extractURLFromClipboard() {
+        var url = ""
+        var urlFound = false
+        if (Clipboard.hasText) {
+           url = Utils.extractUrl(Clipboard.text)
+           urlFound = url && url.length > 10
+        }
+
+        if (!urlFound){
+            banner.notify(qsTr("No URL in clipboard"))
+        }
+
+        return urlFound ? url : false
+    }
+
+    function readLaterFromCover() {
+        var main
+        var url = ""
+        var prefs = Settings.read();
+
+        var url = extractURLFromClipboard()
+        main = toMainPage()
+        main.url = url
+        if (prefs.confirmUrlFromCover) return
+
+        readLater(url)
+    }
+
+    function readLater(url) {
+        try {
+            var prefs = Settings.read();
+            var main = pageStack.currentPage
+
+            console.log("Model: " + url)
+
+            if (!url) return
+
+            spinner.running = true;
+
+            client.success.connect(function() {
+
+                console.log("Success!")
+                activeCover()
+                banner.notify("Success!")
+                spinner.running = false;
+            })
+
+            client.failure.connect(function(message) {
+                console.log("Error: " + message)
+                inactiveCover()
+                banner.notify(message)
+                spinner.running = false;
+            })
+
+            client.add(url, prefs.user, prefs.password)
+            inactiveCover()
+            if (prefs.deactivateOnSuccessfulSubmission) deactivate()
+
+
+        } catch(error) {
+            spinner.running = false;
+            banner.notify(error.toString())
+            console.error(error)
+        }
+    }
+
+
 }
 
 
