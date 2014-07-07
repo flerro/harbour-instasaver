@@ -37,7 +37,7 @@ Dialog {
         Settings.store(user.text,
                        password.text,
                         confirmUrlFromCover.checked,
-                        activateIfNoUrlInClipboard.checked)
+                        deactivateOnSuccess.checked)
     }
 
     onStatusChanged: {
@@ -46,7 +46,7 @@ Dialog {
             user.text = prefs.user || ""
             password.text = prefs.password || ""
             confirmUrlFromCover.checked = prefs.confirmUrlFromCover
-            activateIfNoUrlInClipboard.checked = prefs.activateIfNoUrlInClipboard
+            deactivateOnSuccess.checked = prefs.deactivateOnSuccessfulSubmission
         }
     }
 
@@ -59,8 +59,8 @@ Dialog {
                 onClicked: {
                     user.text = ""
                     password.text = ""
-                    confirmUrlFromCover.checked = true
-                    activateIfNoUrlInClipboard.checked = false
+                    confirmUrlFromCover.checked = false
+                    deactivateOnSuccess.checked = false
                 }
             }
         }
@@ -125,26 +125,26 @@ Dialog {
                 width: parent.width
                 spacing: Theme.paddingSmall
 
-                Label {
-                    anchors {
-                        left: parent.left
-                        leftMargin: Theme.paddingLarge
-                    }
-                    text: qsTr("Using the cover action:")
-                    width: parent.width
-                    color: Theme.highlightColor
-                    font.pixelSize: Theme.fontSizeMedium
-                }
+//                Label {
+//                    anchors {
+//                        left: parent.left
+//                        leftMargin: Theme.paddingLarge
+//                    }
+//                    text: qsTr("Using the cover action:")
+//                    width: parent.width
+//                    color: Theme.highlightColor
+//                    font.pixelSize: Theme.fontSizeMedium
+//                }
 
                 TextSwitch {
                     id: confirmUrlFromCover
-                    text: qsTr("confirm URL submission")
+                    text: qsTr("Confirm submission from cover")
                     width: parent.width
                 }
 
                 TextSwitch {
-                    id: activateIfNoUrlInClipboard
-                    text: qsTr("input URL if not found in clipboard")
+                    id: deactivateOnSuccess
+                    text: qsTr("Miminize app after submission")
                     width: parent.width
                 }
 

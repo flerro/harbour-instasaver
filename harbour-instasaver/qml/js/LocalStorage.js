@@ -33,7 +33,7 @@
 var keys = { user: "USER",
                     password: "PWD",
                     confirmUrlFromCover: "CONFIRMFROMCOVER",
-                    activateIfNoUrlInClipboard: "ACTIVATEIFNOURL" };
+                    deactivateOnSuccessfulSubmission: "MINIMIZE" };
 
 function init() { storage.setup(); };
 
@@ -45,16 +45,16 @@ function read() {
             user: prefs[keys.user],
             password: prefs[keys.password],
             confirmUrlFromCover : asBool(prefs[keys.confirmUrlFromCover]),
-            activateIfNoUrlInClipboard: asBool(prefs[keys.activateIfNoUrlInClipboard])
+            deactivateOnSuccessfulSubmission: asBool(prefs[keys.deactivateOnSuccessfulSubmission])
            }
 }
 
-function store(user, password, confirmUrlFromCover, activateOnCoverError) {
+function store(user, password, confirmUrlFromCover, deactivateOnSuccess) {
     var items = new Array();
     items[keys.user] = user
     items[keys.password] = password
     items[keys.confirmUrlFromCover] = confirmUrlFromCover
-    items[keys.activateIfNoUrlInClipboard] = activateOnCoverError
+    items[keys.deactivateOnSuccessfulSubmission] = deactivateOnSuccess
     storage.store(items);
 }
 
@@ -66,8 +66,8 @@ function shouldConfirmUrlFromCover() {
     return asBool(storage.readPref(keys.confirmUrlFromCover));
 }
 
-function shouldActivateIfNoUrlInClipboard() {
-    return asBool(storage.readPref(keys.activateIfNoUrlInClipboard));
+function shouldDeactivateOnSuccess() {
+    return asBool(storage.readPref(keys.deactivateOnSuccessfulSubmission));
 }
 
 // ------------------------------------------------------------ Private
