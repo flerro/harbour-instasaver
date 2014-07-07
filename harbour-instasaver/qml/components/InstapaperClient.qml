@@ -43,7 +43,7 @@ Item {
     signal failure(string message);
 
     function add(webpage, username, password) {
-        if (!url) {
+        if (!webpage) {
             failure(qsTr("No URL provided."))
         } else {
             var requestParams = { url: this.endpoint, params: { url: webpage, username: username, password: password} }
