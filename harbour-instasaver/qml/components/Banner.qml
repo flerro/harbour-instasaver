@@ -46,7 +46,7 @@ MouseArea {
     Rectangle {
         id: bg
         anchors.fill: parent
-        color: Theme.highlightColor
+        color: Theme.secondaryHighlightColor
     }
 
     Timer {
@@ -78,7 +78,7 @@ MouseArea {
         anchors.verticalCenter: popup.verticalCenter
         font.pixelSize: 32
 //        font.bold: true
-        color: "#000"
+        color: Theme.primaryColor
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
