@@ -19,30 +19,6 @@
 Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Adding...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>URL in clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add from clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No URL in clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No URL in Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>FirstPage</name>
@@ -62,7 +38,8 @@ Instapaper</source>
 <context>
     <name>InactiveCover</name>
     <message>
-        <source>Instasaver</source>
+        <source>Read later via
+Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -84,6 +61,10 @@ Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>URL from Clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Read later</source>
         <translation type="unfinished"></translation>
     </message>
@@ -97,14 +78,6 @@ Instapaper</source>
     </message>
     <message>
         <source>URL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>From Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -142,15 +115,18 @@ Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Using the cover action:</source>
+        <source>Confirm submission from cover</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>confirm URL submission</source>
+        <source>Miminize app after submission</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>harbour-instasaver</name>
     <message>
-        <source>input URL if not found in clipboard</source>
+        <source>No URL in clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
