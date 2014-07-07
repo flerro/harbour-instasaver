@@ -25,7 +25,12 @@
 .pragma library
 
 function urlMatcher() {
-    return /^http[s]*:\/\/.{3,}$/
+    return /^http[s]*:\/\/.{3,252}$/
+}
+
+function isUrl(text) {
+    if (!text) return false
+    return text.match(urlMatcher())
 }
 
 function textContainsUrl(sourceText) {
