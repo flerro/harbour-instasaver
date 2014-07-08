@@ -38,7 +38,7 @@ import "js/LocalStorage.js" as Settings
 ApplicationWindow
 {
     id: app
-    initialPage: Component { Main {} }
+    initialPage: Component { Main { } }
     cover: coverPage
 
     Component.onCompleted: {
@@ -51,6 +51,10 @@ ApplicationWindow
         pageStack.currentPage.addurl.connect(function(website){
             readLater(website)
         });
+
+        if (!Settings.getUser()) {
+            displaySettingsPage()
+        }
     }
 
     CoverPage {
@@ -61,25 +65,16 @@ ApplicationWindow
         id: client
     }
 
-    Banner {
-        id: banner
-    }
-
     BusyOverlay {
         id: spinner
     }
 
-    function toMainPage(msg) {
-        pageStack.clear();
-        pageStack.replace(Qt.resolvedUrl("pages/Main.qml"));
-        activate();
-        return pageStack.currentPage
+    Banner {
+        id: banner
     }
 
-    function toSettingsPage() {
-        toMainPage()
-        pageStack.push("pages/Settings.qml");
-        return pageStack.currentPage
+    function displaySettingsPage() {
+        pageStack.push("pages/Settings.qml")
     }
 
     function extractURLFromClipboard() {
@@ -98,13 +93,14 @@ ApplicationWindow
     }
 
     function readLaterFromCover() {
-        var main
         var url = ""
         var prefs = Settings.read();
 
+        app.activate()
+
         var url = extractURLFromClipboard()
-        main = toMainPage()
-        main.url = url
+        pageStack.currentPage.url = url
+
         if (prefs.confirmUrlFromCover) return
 
         readLater(url)
@@ -113,13 +109,11 @@ ApplicationWindow
     function readLater(url) {
         try {
             var prefs = Settings.read();
-            var main = pageStack.currentPage
-            var successMessage = qsTr("Success!")
 
             var notify = function(message, done) {
                 coverPage.notify(message, url, done)
-                banner.notify(message)
                 spinner.running = false;
+                banner.notify(message)
             }
 
             if (!url) return
@@ -130,7 +124,7 @@ ApplicationWindow
                 if (prefs.deactivateOnSuccessfulSubmission) {
                     deactivate()
                 }
-                notify(successMessage, true)
+                notify( qsTr("Success!"), true)
             })
 
             client.failure.connect(function(message) {
