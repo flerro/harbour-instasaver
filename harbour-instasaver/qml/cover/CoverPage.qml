@@ -45,6 +45,7 @@ CoverBackground {
     CoverPlaceholder {
         id: placeholder
         anchors.centerIn: parent
+        text: qsTr("Add to Instapaper")
     }
 
     Label {
@@ -57,7 +58,7 @@ CoverBackground {
             horizontalCenter: parent.horizontalCenter
         }
         width: parent.width - (Theme.paddingMedium * 2)
-        wrapMode: Text.WrapAnywhere
+        wrapMode: Text.WordWrap
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -70,8 +71,8 @@ CoverBackground {
             horizontalCenter: parent.horizontalCenter
         }
         color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeTiny
-        maximumLineCount: 2
+        font.pixelSize: Theme.fontSizeExtraSmall
+        maximumLineCount: 3
         wrapMode: Text.WrapAnywhere
         horizontalAlignment: Text.AlignHCenter
     }
@@ -80,7 +81,7 @@ CoverBackground {
         id: resetTimer
         triggeredOnStart: false
         repeat: false
-        interval: 4000
+        interval: 5000
         onTriggered: resetCover()
     }
 
@@ -96,17 +97,15 @@ CoverBackground {
 
     function notify(message, website, completed) {
         submitting = !completed
-        hint = website.replace(/^http(s)?:\/\//,"")
-        url = ""
-        placeholder.text = message
+        hint = message
+        url = website.replace(/^http(s)?:\/\//,"")
         if (completed) {
             resetTimer.restart()
         }
     }
 
     function resetCover() {
-        placeholder.text = qsTr("Add to Instapaper")
-        hint = qsTr("From Clipboard")
+        hint = qsTr("Extract URL\nfrom Clipboard")
         url = ""
         submitting = false
     }

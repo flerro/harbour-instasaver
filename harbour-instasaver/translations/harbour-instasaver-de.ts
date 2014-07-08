@@ -19,7 +19,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>From Clipboard</source>
+        <source>Extract URL
+from Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -115,6 +116,10 @@
     </message>
     <message>
         <source>Review submission from cover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miminize on startup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

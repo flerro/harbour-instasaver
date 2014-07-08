@@ -25,7 +25,7 @@
 .pragma library
 
 function urlMatcher() {
-    return /^http[s]*:\/\/.{3,}$/
+    return /^http(s)?:\/\/.{3,}$/
 }
 
 function isUrl(text) {

@@ -13,8 +13,8 @@ Name:       harbour-instasaver
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Instasaver
-Version:    0.2
-Release:    2
+Version:    0.3
+Release:    1
 Group:      Qt/Qt
 License:    LICENSE
 URL:        http://www.rolandfg.net/2014/06/22/instasaver-for-sailfish-os/
