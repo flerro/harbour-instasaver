@@ -92,11 +92,7 @@ Dialog {
                 width: column.width
                 focus: true
                 inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhExclusiveInputMask
-//                validator: RegExpValidator { regExp: Utils.urlMatcher() }
                 EnterKey.enabled: false
-//                EnterKey.enabled: Utils.isUrl(url)
-//                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-//                EnterKey.onClicked: readLater()
                 font.pixelSize: Theme.fontSizeMedium
             }
 

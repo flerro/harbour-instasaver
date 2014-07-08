@@ -115,10 +115,9 @@ ApplicationWindow
             var prefs = Settings.read();
             var main = pageStack.currentPage
             var successMessage = qsTr("Success!")
-            var completed = true
 
-            var notify = function(message) {
-                coverPage.notify(message, url, message != successMessage)
+            var notify = function(message, done) {
+                coverPage.notify(message, url, done)
                 banner.notify(message)
                 spinner.running = false;
             }
@@ -131,11 +130,13 @@ ApplicationWindow
                 if (prefs.deactivateOnSuccessfulSubmission) {
                     deactivate()
                 }
-                notify(successMessage, url, completed)
+                notify(successMessage, true)
             })
+
             client.failure.connect(function(message) {
-                notify(message, url, completed)
+                notify(message, true)
             })
+
             client.add(url, prefs.user, prefs.password)
 
             coverPage.notify(qsTr("In progress..."), url)

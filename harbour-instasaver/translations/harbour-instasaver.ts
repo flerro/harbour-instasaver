@@ -96,10 +96,6 @@ from Clipboard</source>
         <source>Review submission from cover</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Miminize on startup</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>harbour-instasaver</name>
