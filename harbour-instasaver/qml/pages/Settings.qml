@@ -125,26 +125,15 @@ Dialog {
                 width: parent.width
                 spacing: Theme.paddingSmall
 
-//                Label {
-//                    anchors {
-//                        left: parent.left
-//                        leftMargin: Theme.paddingLarge
-//                    }
-//                    text: qsTr("Using the cover action:")
-//                    width: parent.width
-//                    color: Theme.highlightColor
-//                    font.pixelSize: Theme.fontSizeMedium
-//                }
-
                 TextSwitch {
-                    id: confirmUrlFromCover
-                    text: qsTr("Confirm submission from cover")
+                    id: deactivateOnSuccess
+                    text: qsTr("Miminize on success")
                     width: parent.width
                 }
 
                 TextSwitch {
-                    id: deactivateOnSuccess
-                    text: qsTr("Miminize app after submission")
+                    id: confirmUrlFromCover
+                    text: qsTr("Review submission from cover")
                     width: parent.width
                 }
 

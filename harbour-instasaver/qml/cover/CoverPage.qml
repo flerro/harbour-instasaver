@@ -28,54 +28,51 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import "../js/LocalStorage.js" as Settings
-import "../js/UrlUtils.js" as Utils
-import "../pages"
-import "../components"
 
 CoverBackground {
     id: cover
 
-    property alias hint: lblUrlHint.text
-    property alias url: lblUrl.text
+    signal addurl
 
-    onStatusChanged: {
-        if (status === PageStatus.Active) {
-            resetCover()
-        }
+    property bool submitting: false
+    property alias hint: message.text
+    property alias url: href.text
+
+    Component.onCompleted: {
+         resetCover()
     }
 
     CoverPlaceholder {
+        id: placeholder
         anchors.centerIn: parent
-        text: qsTr("Read later via\nInstapaper")
     }
 
     Label {
-        id: lblUrlHint
+        id: message
         color: Theme.highlightColor
-        font.pixelSize: Theme.fontSizeSmall
+        font.pixelSize: Theme.fontSizeExtraSmall
         anchors {
             top: parent.top
             topMargin: Theme.paddingLarge
             horizontalCenter: parent.horizontalCenter
         }
         width: parent.width - (Theme.paddingMedium * 2)
-        wrapMode: Text.WordWrap
+        wrapMode: Text.WrapAnywhere
         horizontalAlignment: Text.AlignHCenter
     }
 
     Label {
-        id: lblUrl
-        height: lblUrl.paintedHeight
+        id: href
+        height: href.paintedHeight
         width: parent.width - (Theme.paddingMedium * 2)
         anchors {
-            top: lblUrlHint.bottom
+            top: message.bottom
             horizontalCenter: parent.horizontalCenter
         }
         color: Theme.highlightColor
         font.pixelSize: Theme.fontSizeTiny
         maximumLineCount: 2
-        wrapMode: Text.WordWrap
+        wrapMode: Text.WrapAnywhere
         horizontalAlignment: Text.AlignHCenter
     }
 
@@ -83,80 +80,35 @@ CoverBackground {
         id: resetTimer
         triggeredOnStart: false
         repeat: false
-        interval: 3500
+        interval: 4000
         onTriggered: resetCover()
-    }
-
-    InstapaperClient {
-        id: client
     }
 
     CoverActionList {
         id: coverAction
+        enabled: !submitting
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
-            onTriggered: readLater()
+            onTriggered: addurl()
+        }
+    }
+
+    function notify(message, website, completed) {
+        submitting = !completed
+        hint = website.replace(/^http(s)?:\/\//,"")
+        url = ""
+        placeholder.text = message
+        if (completed) {
+            resetTimer.restart()
         }
     }
 
     function resetCover() {
-        hint = qsTr("Add from clipboard")
+        placeholder.text = qsTr("Add to Instapaper")
+        hint = qsTr("From Clipboard")
         url = ""
-    }
-
-    function refreshUrlFromClipboard() {
-        var hasUrlInClipboard = Clipboard.hasText &&
-                                    Utils.textContainsUrl(Clipboard.text)
-        if (!hasUrlInClipboard) return
-
-        url = Utils.extractUrl(Clipboard.text)
-        hint = (url) ? qsTr("URL in clipboard") : ""
-
-        return url
-    }
-
-    function readLater() {
-        try {
-            var currentUrl = refreshUrlFromClipboard()
-
-            var prefs = Settings.read()
-
-            if (!currentUrl && prefs.activateIfNoUrlInClipboard) {
-                var page = app.toMainPage()
-                page.pasteUrlAndNotify(qsTr("No URL in clipboard"))
-                return
-            }
-
-            if (!currentUrl && !prefs.activateIfNoUrlInClipboard) {
-                hint = qsTr("No URL in Clipboard")
-                resetTimer.restart()
-                return
-            }
-
-            if (prefs.confirmUrlFromCover) {
-                var page = app.toMainPage()
-                page.pasteUrl()
-                return
-            }
-
-            hint = qsTr("Adding...")
-
-            client.success.connect(function() {
-                hint = qsTr("Success")
-                resetTimer.restart()
-            })
-
-            client.failure.connect(function(message) {
-                hint = message
-            })
-
-            var prefs = Settings.read();
-            client.add(currentUrl, prefs.user, prefs.password)
-
-        } catch(error) {
-            hint = error.toString()
-        }
+        submitting = false
     }
 
 }

@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import "cover"
 import "pages"
 import "components"
 
@@ -37,13 +38,23 @@ import "js/LocalStorage.js" as Settings
 ApplicationWindow
 {
     id: app
-    initialPage: Component { Main { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    initialPage: Component { Main {} }
+    cover: coverPage
 
     Component.onCompleted: {
         Settings.init();
 
-        Clipboard.text = "adsad sa dsa sa http://www.test.com/dasdsasadsa/dsadsadsadsadsadsa"
+        coverPage.addurl.connect(function(){
+            readLaterFromCover()
+        });
+
+        pageStack.currentPage.addurl.connect(function(website){
+            readLater(website)
+        });
+    }
+
+    CoverPage {
+        id: coverPage
     }
 
     InstapaperClient {
@@ -59,9 +70,8 @@ ApplicationWindow
     }
 
     function toMainPage(msg) {
-        var uri = "pages/Main.qml"
         pageStack.clear();
-        pageStack.replace(Qt.resolvedUrl(uri));
+        pageStack.replace(Qt.resolvedUrl("pages/Main.qml"));
         activate();
         return pageStack.currentPage
     }
@@ -70,16 +80,6 @@ ApplicationWindow
         toMainPage()
         pageStack.push("pages/Settings.qml");
         return pageStack.currentPage
-    }
-
-    function activeCover() {
-        app.cover = Qt.resolvedUrl("cover/CoverPage.qml")
-    }
-
-    function inactiveCover() {
-        var cover = Qt.resolvedUrl("cover/CoverPage.qml")
-        cover.hint = "ciao bello..."
-        app.cover = cover
     }
 
     function extractURLFromClipboard() {
@@ -114,40 +114,38 @@ ApplicationWindow
         try {
             var prefs = Settings.read();
             var main = pageStack.currentPage
+            var successMessage = qsTr("Success!")
+            var completed = true
 
-            console.log("Model: " + url)
+            var notify = function(message) {
+                coverPage.notify(message, url, message != successMessage)
+                banner.notify(message)
+                spinner.running = false;
+            }
 
             if (!url) return
 
             spinner.running = true;
 
             client.success.connect(function() {
-
-                console.log("Success!")
-                activeCover()
-                banner.notify("Success!")
-                spinner.running = false;
+                if (prefs.deactivateOnSuccessfulSubmission) {
+                    deactivate()
+                }
+                notify(successMessage, url, completed)
             })
-
             client.failure.connect(function(message) {
-                console.log("Error: " + message)
-                inactiveCover()
-                banner.notify(message)
-                spinner.running = false;
+                notify(message, url, completed)
             })
-
             client.add(url, prefs.user, prefs.password)
-            inactiveCover()
-            if (prefs.deactivateOnSuccessfulSubmission) deactivate()
 
+            coverPage.notify(qsTr("In progress..."), url)
 
         } catch(error) {
             spinner.running = false;
             banner.notify(error.toString())
-            console.error(error)
+            // console.error(error)
         }
     }
-
 
 }
 

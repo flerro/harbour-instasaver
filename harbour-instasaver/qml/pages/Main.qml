@@ -27,10 +27,11 @@ import Sailfish.Silica 1.0
 
 import "../js/UrlUtils.js" as Utils
 import "../js/LocalStorage.js" as Settings
-import "../components"
 
 Dialog {
     id: main
+
+    signal addurl(string website)
 
     property alias url: href.text
     property alias user: username.text
@@ -47,7 +48,7 @@ Dialog {
 
     canAccept: Utils.isUrl(url)
 
-    onAccepted: readLater()
+    onAccepted: addurl(url)
 
     SilicaFlickable {
         anchors.fill: parent
@@ -64,7 +65,9 @@ Dialog {
             MenuItem {
                 text: qsTr("URL from Clipboard")
                 onClicked: {
-                    url = app.extractURLFromClipboard()
+                    var extracted = app.extractURLFromClipboard()
+                    url = extracted || ""
+                    href.focus = false
                 }
             }
         }
@@ -94,7 +97,7 @@ Dialog {
 //                EnterKey.enabled: Utils.isUrl(url)
 //                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
 //                EnterKey.onClicked: readLater()
-                font.pixelSize: 0
+                font.pixelSize: Theme.fontSizeMedium
             }
 
             Label {
@@ -105,10 +108,6 @@ Dialog {
             }
 
         }
-    }
-
-    function readLater(){
-        app.readLater(url)
     }
 
 }
