@@ -15,16 +15,11 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Read later via
-Instapaper</source>
+        <source>Add to Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>InactiveCover</name>
     <message>
-        <source>Read later via
-Instapaper</source>
+        <source>From Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -93,11 +88,11 @@ Instapaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Confirm submission from cover</source>
+        <source>Miminize on success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Miminize app after submission</source>
+        <source>Review submission from cover</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -105,6 +100,14 @@ Instapaper</source>
     <name>harbour-instasaver</name>
     <message>
         <source>No URL in clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In progress...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
