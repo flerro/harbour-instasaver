@@ -33,6 +33,8 @@ import "../js/LocalStorage.js" as Settings
 Dialog {
     id: settingsPage
 
+    canAccept: user.text.length > 0
+
     onAccepted: {
         Settings.store(user.text,
                        password.text,
