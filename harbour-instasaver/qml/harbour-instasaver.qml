@@ -48,10 +48,6 @@ ApplicationWindow
             readLaterFromCover()
         });
 
-        pageStack.currentPage.addurl.connect(function(website){
-            readLater(website)
-        });
-
         if (!Settings.getUser()) {
             displaySettingsPage()
         }
@@ -69,12 +65,8 @@ ApplicationWindow
         id: spinner
     }
 
-    Banner {
-        id: banner
-    }
-
     function displaySettingsPage() {
-        pageStack.push("pages/Settings.qml")
+        pageStack.push(Qt.resolvedUrl("pages/Settings.qml"))
     }
 
     function extractURLFromClipboard() {
@@ -99,7 +91,9 @@ ApplicationWindow
         app.activate()
 
         var url = extractURLFromClipboard()
-        pageStack.currentPage.url = url
+        if (pageStack.currentPage.url) {
+            pageStack.currentPage.url = url
+        }
 
         if (prefs.confirmUrlFromCover) return
 
@@ -107,37 +101,37 @@ ApplicationWindow
     }
 
     function readLater(url) {
+        if (!url) return
+
+        var notifyCompleted = function(message) {
+            var done = true
+            coverPage.notify(message, url, done)
+            pageStack.currentPage.notify(message, url, done)
+            spinner.running = false;
+        }
+
         try {
+            spinner.running = true
+            coverPage.notify(qsTr("In progress..."), url)
+
             var prefs = Settings.read();
-
-            var notify = function(message, done) {
-                coverPage.notify(message, url, done)
-                spinner.running = false;
-                banner.notify(message)
-            }
-
-            if (!url) return
-
-            spinner.running = true;
 
             client.success.connect(function() {
                 if (prefs.deactivateOnSuccessfulSubmission) {
                     deactivate()
                 }
-                notify( qsTr("Success!"), true)
+                notifyCompleted(qsTr("Success!"))
             })
 
             client.failure.connect(function(message) {
-                notify(message, true)
+                notifyCompleted(message)
             })
 
             client.add(url, prefs.user, prefs.password)
 
-            coverPage.notify(qsTr("In progress..."), url)
-
         } catch(error) {
             spinner.running = false;
-            banner.notify(error.toString())
+            notifyCompleted(error.toString())
             // console.error(error)
         }
     }

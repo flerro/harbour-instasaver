@@ -25,6 +25,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
+import "../components"
 import "../js/UrlUtils.js" as Utils
 import "../js/LocalStorage.js" as Settings
 
@@ -36,18 +37,24 @@ Dialog {
     property alias url: href.text
     property alias user: username.text
 
+    allowedOrientations: Orientation.Portrait | Orientation.Landscape
+
     onStatusChanged: {
         if (status === PageStatus.Active) {
             user = Settings.getUser()
-
-            if (!user) {
-                app.displaySettingsPage()
-            }
         }
     }
 
-    canAccept: Utils.isUrl(url)
+    Component.onCompleted: {
+        addurl.connect(function(website){
+            app.readLater(website)
+        });
+    }
 
+    acceptDestinationAction: PageStackAction.Replace
+    acceptDestination: Qt.resolvedUrl("Main.qml")
+
+    canAccept: !href.errorHighlight
     onAccepted: addurl(url)
 
     SilicaFlickable {
@@ -67,7 +74,6 @@ Dialog {
                 onClicked: {
                     var extracted = app.extractURLFromClipboard()
                     url = extracted || ""
-                    href.focus = false
                 }
             }
         }
@@ -84,16 +90,19 @@ Dialog {
                 title: qsTr("Instasaver")
             }
 
-            TextArea {
+            TextField {
                 id: href
                 anchors.horizontalCenter: parent.horizontalCenter
                 placeholderText: qsTr("Enter URL")
                 label: qsTr("URL")
                 width: column.width
                 focus: true
-                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhExclusiveInputMask
-                EnterKey.enabled: false
-                font.pixelSize: Theme.fontSizeMedium
+                inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
+                validator: RegExpValidator { regExp: Utils.urlMatcher() }
+                EnterKey.enabled: text.length > 10
+                EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+                EnterKey.onClicked: accept()
+                font.pixelSize: Theme.fontSizeSmall
             }
 
             Label {
@@ -106,6 +115,15 @@ Dialog {
         }
     }
 
+
+    Banner {
+        id: banner
+    }
+
+    function notify(message, website, completed) {
+        banner.notify(message)
+        url = website
+    }
 }
 
 
