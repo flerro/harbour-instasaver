@@ -30,7 +30,7 @@ function urlMatcher() {
 
 function isUrl(text) {
     if (!text) return false
-    return text.match(urlMatcher())
+    return text.match(/^http(s)?:\/\//)
 }
 
 function textContainsUrl(sourceText) {
