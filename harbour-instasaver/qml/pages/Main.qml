@@ -122,7 +122,9 @@ Dialog {
 
     function notify(message, website, completed) {
         banner.notify(message)
-        url = website
+        if (website) {
+            url = website
+        }
     }
 }
 
