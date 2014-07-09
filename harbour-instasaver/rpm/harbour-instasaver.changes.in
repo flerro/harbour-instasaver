@@ -8,8 +8,10 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
-* Wed Jul 08 2014 Francesco Lerro <francesco.lerro@gmail.com> 0.0.3-1
-- application is always activated on URL submission from cover to correctly detect Clipboard changes
+* Wed Jul 08 2014 Francesco Lerro <francesco.lerro@gmail.com> 1.0.0-1
+- Application is always activated on URL submission from cover to correctly detect Clipboard changes
+- Consistent dialog handling
+- New preference: Minimize app on submission success
 
 * Thu Jun 28 2014 Francesco Lerro <francesco.lerro@gmail.com> 0.0.2-1
 - When submitting from cover, if no URL in clipboard the main dialog is activated (can be disabled in preferences)
