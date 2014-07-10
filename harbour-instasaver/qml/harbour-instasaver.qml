@@ -85,7 +85,7 @@ ApplicationWindow
             banner.notify(qsTr("No URL in clipboard"))
         }
 
-        return urlFound ? url : false
+        return urlFound ? url : ""
     }
 
     function readLaterFromCover() {
@@ -93,15 +93,11 @@ ApplicationWindow
         var prefs = Settings.read();
 
         app.activate()
-
-        var url = extractURLFromClipboard()
-        if (pageStack.currentPage.url) {
-            pageStack.currentPage.url = url
-        }
+        pageStack.currentPage.url = extractURLFromClipboard()
 
         if (prefs.confirmUrlFromCover) return
 
-        readLater(url)
+        pageStack.currentPage.accept()
     }
 
     function readLater(url) {

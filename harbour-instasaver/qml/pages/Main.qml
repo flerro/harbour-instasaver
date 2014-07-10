@@ -37,7 +37,7 @@ Dialog {
     property alias url: href.text
     property alias user: username.text
 
-    allowedOrientations: Orientation.Portrait | Orientation.Landscape
+//    allowedOrientations: Orientation.Portrait | Orientation.Landscape
 
     onStatusChanged: {
         if (status === PageStatus.Active) {
@@ -66,8 +66,7 @@ Dialog {
             MenuItem {
                 text: qsTr("URL from Clipboard")
                 onClicked: {
-                    var extracted = app.extractURLFromClipboard()
-                    if (extracted) url = extracted
+                    url = app.extractURLFromClipboard()
                 }
             }
         }
