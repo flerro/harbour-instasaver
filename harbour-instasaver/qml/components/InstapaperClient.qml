@@ -51,7 +51,7 @@ Item {
 
             timer.timeout.connect(function() {
                 request.abort()
-                failure("Timed out")
+                failure("Request timeout")
             });
 
             timer.start()

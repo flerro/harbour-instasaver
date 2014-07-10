@@ -45,17 +45,11 @@ Dialog {
         }
     }
 
-    Component.onCompleted: {
-        addurl.connect(function(website){
-            app.readLater(website)
-        });
-    }
-
     acceptDestinationAction: PageStackAction.Replace
     acceptDestination: Qt.resolvedUrl("Main.qml")
 
     canAccept: !href.errorHighlight
-    onAccepted: addurl(url)
+    onAccepted: app.readLater(url)
 
     SilicaFlickable {
         anchors.fill: parent
@@ -99,7 +93,7 @@ Dialog {
                 focus: true
                 inputMethodHints: Qt.ImhUrlCharactersOnly | Qt.ImhNoAutoUppercase | Qt.ImhSensitiveData
                 validator: RegExpValidator { regExp: Utils.urlMatcher() }
-                EnterKey.enabled: text.length > 10
+                EnterKey.enabled: !href.errorHighlight
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                 EnterKey.onClicked: accept()
                 font.pixelSize: Theme.fontSizeSmall
@@ -112,18 +106,6 @@ Dialog {
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
-        }
-    }
-
-
-    Banner {
-        id: banner
-    }
-
-    function notify(message, website, completed) {
-        banner.notify(message)
-        if (website) {
-            url = website
         }
     }
 }

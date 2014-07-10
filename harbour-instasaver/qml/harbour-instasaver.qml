@@ -65,6 +65,10 @@ ApplicationWindow
         id: spinner
     }
 
+    Banner {
+        id: banner
+    }
+
     function displaySettingsPage() {
         pageStack.push(Qt.resolvedUrl("pages/Settings.qml"))
     }
@@ -103,35 +107,41 @@ ApplicationWindow
     function readLater(url) {
         if (!url) return
 
-        var notifyCompleted = function(message) {
-            var done = true
+        var successMessage = qsTr("Success!")
+        var inprogressMessage = qsTr("In progress...")
+
+        var notifySubmission = function(message, done) {
+            spinner.running = !done
             coverPage.notify(message, url, done)
-            pageStack.currentPage.notify(message, url, done)
-            spinner.running = false;
+            if (done) {
+                var isError = successMessage != message
+                banner.notify(message, isError ? "" : url, isError)
+                if (isError)
+                    pageStack.currentPage.url = url
+            }
         }
 
         try {
-            spinner.running = true
-            coverPage.notify(qsTr("In progress..."), url)
-
             var prefs = Settings.read();
 
             client.success.connect(function() {
+                notifySubmission(successMessage, true)
                 if (prefs.deactivateOnSuccessfulSubmission) {
                     deactivate()
                 }
-                notifyCompleted(qsTr("Success!"))
             })
 
             client.failure.connect(function(message) {
-                notifyCompleted(message)
+                notifySubmission(message, true)
             })
 
             client.add(url, prefs.user, prefs.password)
 
+            notifySubmission(inprogressMessage)
+
         } catch(error) {
             spinner.running = false;
-            notifyCompleted(error.toString())
+            notifySubmission(error.toString())
             // console.error(error)
         }
     }
