@@ -42,6 +42,7 @@ Dialog {
     onStatusChanged: {
         if (status === PageStatus.Active) {
             user = Settings.getUser()
+            url = app.submittingUrl || ""
         }
     }
 

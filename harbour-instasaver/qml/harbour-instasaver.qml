@@ -41,6 +41,8 @@ ApplicationWindow
     initialPage: Component { Main { } }
     cover: coverPage
 
+    property string submittingUrl: ""
+
     Component.onCompleted: {
         Settings.init();
 
@@ -110,10 +112,10 @@ ApplicationWindow
             spinner.running = !done
             coverPage.notify(message, url, done)
             if (done) {
-                var isError = successMessage != message
-                banner.notify(message, isError ? "" : url, isError)
-                if (isError)
-                    pageStack.currentPage.url = url
+                submittingUrl = ""
+                banner.notify(message)
+            } else {
+                submittingUrl = url
             }
         }
 

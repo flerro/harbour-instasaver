@@ -103,6 +103,7 @@ Dialog {
                     placeholderText: qsTr("Username")
                     label: qsTr("Username")
                     width: parent.width
+                    inputMethodHints: Qt.ImhNoAutoUppercase
                     EnterKey.enabled: text.length > 0
                     EnterKey.iconSource: "image://theme/icon-m-enter-next"
                     EnterKey.onClicked: password.focus = true
@@ -113,6 +114,7 @@ Dialog {
                     placeholderText: qsTr("Password")
                     label: qsTr("Password")
                     width: parent.width
+                    inputMethodHints: Qt.ImhNoAutoUppercase
                     echoMode: TextInput.Password
                     EnterKey.enabled: text.length > 0
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"

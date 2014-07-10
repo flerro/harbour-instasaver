@@ -32,9 +32,8 @@ MouseArea {
     id: popup
     anchors.top: parent.top
     width: parent.width
-    height: message.paintedHeight + hint.paintedHeight + Theme.paddingLarge
+    height: message.paintedHeight + (Theme.paddingLarge * 2)
     property alias title: message.text
-    property alias subTitle: hint.text
     property alias timeout: hideTimer.interval
     property alias background: bg.color
     visible: opacity > 0
@@ -69,24 +68,17 @@ MouseArea {
         hideTimer.restart()
     }
 
-    function notify(text, description) {
+    function notify(text) {
         popup.title = text
-        if (description) {
-            popup.subTitle = description
-            hint.visible = true
-        } else {
-            hint.visible = false
-        }
-
         show()
     }
 
     Label {
         id: message
-        anchors.top: bg.top
-        font.pixelSize: Theme.fontSizeMedium
+        anchors.verticalCenter: popup.verticalCenter
+        font.pixelSize: 32
+//        font.bold: true
         color: Theme.primaryColor
-        anchors.topMargin: Theme.paddingLarge
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right
@@ -94,20 +86,6 @@ MouseArea {
         horizontalAlignment: Text.AlignLeft
         elide: Text.ElideRight
         wrapMode: Text.Wrap
-    }
-
-    Label {
-        id: hint
-        font.pixelSize: Theme.fontSizeExtraSmall
-        color: Theme.secondaryColor
-        anchors.top: message.bottom
-        anchors.left: parent.left
-        anchors.leftMargin: Theme.paddingLarge
-        anchors.right: parent.right
-        anchors.rightMargin: Theme.paddingLarge
-        horizontalAlignment: Text.AlignLeft
-        elide: Text.ElideRight
-        wrapMode: Text.NoWrap
     }
 
     onClicked: hide()
