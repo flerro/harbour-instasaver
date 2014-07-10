@@ -19,8 +19,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Extract URL
-from Clipboard</source>
+        <source>URL from Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -42,10 +41,6 @@ from Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>URL from Clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Read later</source>
         <translation type="unfinished"></translation>
     </message>
@@ -59,6 +54,10 @@ from Clipboard</source>
     </message>
     <message>
         <source>URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>URL from Clipboard</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

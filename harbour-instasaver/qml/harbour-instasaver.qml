@@ -82,7 +82,7 @@ ApplicationWindow
         }
 
         if (!urlFound){
-            pageStack.currentPage.notify(qsTr("No URL in clipboard"))
+            banner.notify(qsTr("No URL in clipboard"))
         }
 
         return urlFound ? url : false

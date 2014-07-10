@@ -104,7 +104,7 @@ CoverBackground {
     }
 
     function resetCover() {
-        hint = qsTr("Extract URL\nfrom Clipboard")
+        hint = qsTr("URL from Clipboard")
         url = ""
         submitting = false
     }

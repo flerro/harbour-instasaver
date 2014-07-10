@@ -67,7 +67,7 @@ Dialog {
                 text: qsTr("URL from Clipboard")
                 onClicked: {
                     var extracted = app.extractURLFromClipboard()
-                    url = extracted || ""
+                    if (extracted) url = extracted
                 }
             }
         }
@@ -96,7 +96,7 @@ Dialog {
                 EnterKey.enabled: !href.errorHighlight
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
                 EnterKey.onClicked: accept()
-                font.pixelSize: Theme.fontSizeSmall
+                font.pixelSize: Theme.fontSizeMedium
             }
 
             Label {
